@@ -92,6 +92,12 @@ export const bind = (ctrl: AnalyseCtrl) => {
     kbd.bind('n', ctrl.study.goToNextChapter);
     for (let i = 1; i < 7; i++) kbd.bind(i.toString(), () => ctrl.study?.glyphForm.toggleGlyph(i));
   } else {
+    kbd.bind('r', () => {
+      $('.analyse__underboard__panels .computer-analysis button').each(function (this: HTMLElement) {
+        this.click();
+      });
+    });
+
     const keyToJumpToGlyphSymbol = (key: string, isBottom: boolean, symbol: string) => {
       kbd.bind(key, () => {
         ctrl.jumpToGlyphSymbol(isBottom ? ctrl.bottomColor() : ctrl.topColor(), symbol);
