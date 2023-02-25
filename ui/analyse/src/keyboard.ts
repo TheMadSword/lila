@@ -91,6 +91,19 @@ export const bind = (ctrl: AnalyseCtrl) => {
     kbd.bind('p', ctrl.study.goToPrevChapter);
     kbd.bind('n', ctrl.study.goToNextChapter);
     for (let i = 1; i < 7; i++) kbd.bind(i.toString(), () => ctrl.study?.glyphForm.toggleGlyph(i));
+  } else {
+    const keyToJumpToGlyphSymbol = (key: string, isBottom: boolean, symbol: string) => {
+      kbd.bind(key, () => {
+        ctrl.jumpToGlyphSymbol(isBottom ? ctrl.bottomColor() : ctrl.topColor(), symbol);
+        ctrl.redraw();
+      });
+    };
+    keyToJumpToGlyphSymbol('b', true, '??');
+    keyToJumpToGlyphSymbol('m', true, '?');
+    keyToJumpToGlyphSymbol('i', true, '?!');
+    keyToJumpToGlyphSymbol('shift+b', false, '??');
+    keyToJumpToGlyphSymbol('shift+m', false, '?');
+    keyToJumpToGlyphSymbol('shift+i', false, '?!');
   }
 };
 
