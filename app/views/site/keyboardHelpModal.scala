@@ -74,6 +74,7 @@ object keyboardHelpModal:
           row(kbd("a"), trans.bestMoveArrow()),
           row(kbd("e"), trans.openingEndgameExplorer()),
           row(kbd("r"), trans.keyRequestComputerAnalysis()),
+          row(kbd("enter"), trans.keyNextLearnFromYourMistakes()),
           row(frag(kbd("b"), or, kbd("shift"), kbd("b")), trans.keyNextBlunder()),
           row(frag(kbd("m"), or, kbd("shift"), kbd("m")), trans.keyNextMistake()),
           row(frag(kbd("i"), or, kbd("shift"), kbd("i")), trans.keyNextInaccuracy()),
