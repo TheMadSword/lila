@@ -92,9 +92,14 @@ export const bind = (ctrl: AnalyseCtrl) => {
     kbd.bind('p', ctrl.study.goToPrevChapter);
     kbd.bind('n', ctrl.study.goToNextChapter);
     for (let i = 1; i < 7; i++) kbd.bind(i.toString(), () => ctrl.study?.glyphForm.toggleGlyph(i));
-  } else { //not study
+  } else {
+    //not study
     //'Request computer analysis' & 'Learn From Your Mistakes' (mutually exclusive)
-    keyToMouseEvent('r', 'click', '.analyse__underboard__panels .computer-analysis button, .analyse__round-training .advice-summary a.button');
+    keyToMouseEvent(
+      'r',
+      'click',
+      '.analyse__underboard__panels .computer-analysis button, .analyse__round-training .advice-summary a.button'
+    );
     //'Next' button ("in Learn From Your Mistake")
     keyToMouseEvent('enter', 'click', '.analyse__tools .training-box a.continue');
 
