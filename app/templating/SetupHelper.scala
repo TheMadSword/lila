@@ -249,6 +249,7 @@ trait SetupHelper { self: I18nHelper =>
       (Pref.SubmitMove.NEVER, trans.never.txt()),
       (Pref.SubmitMove.CORRESPONDENCE_ONLY, trans.preferences.inCorrespondenceGames.txt()),
       (Pref.SubmitMove.CORRESPONDENCE_UNLIMITED, trans.preferences.correspondenceAndUnlimited.txt()),
+      (Pref.SubmitMove.CLASSIC_CORRESPONDENCE_UNLIMITED, trans.preferences.classicCorrespondenceAndUnlimited.txt()),
       (Pref.SubmitMove.ALWAYS, trans.always.txt())
     )
 

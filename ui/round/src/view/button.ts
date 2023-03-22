@@ -7,6 +7,7 @@ import { game as gameRoute } from 'game/router';
 import { RoundData, MaybeVNodes } from '../interfaces';
 import { ClockData } from '../clock/clockCtrl';
 import RoundController from '../ctrl';
+import { toggle } from 'common/toggle';
 
 function analysisBoardOrientation(data: RoundData) {
   return data.game.variant.key === 'racingKings' ? 'white' : data.player.color;
@@ -270,6 +271,17 @@ export function answerOpponentTakebackProposition(ctrl: RoundController) {
 export function submitMove(ctrl: RoundController): VNode | undefined {
   return ctrl.moveToSubmit || ctrl.dropToSubmit
     ? h('div.negotiation.move-confirm', [
+        toggle(
+          {
+            name: '',
+            title: 'enableConfirmationForThisGame',
+            id: 'enable-move-confirmation',
+            checked: ctrl.newAllowMoveConfirmation,
+            change: ctrl.toggleMoveConfirmation,
+          },
+          ctrl.trans,
+          ctrl.redraw
+        ),
         declineButton(ctrl, () => ctrl.submitMove(false), 'cancel'),
         h('p', ctrl.noarg('confirmMove')),
         acceptButton(ctrl, 'confirm-yes', () => ctrl.submitMove(true)),

@@ -115,11 +115,12 @@ final class JsonView(
               .add("submitMove" -> {
                 import Pref.SubmitMove.*
                 pref.submitMove match {
-                  case _ if game.hasAi || nvui                            => false
-                  case ALWAYS                                             => true
-                  case CORRESPONDENCE_UNLIMITED if game.isCorrespondence  => true
-                  case CORRESPONDENCE_ONLY if game.hasCorrespondenceClock => true
-                  case _                                                  => false
+                  case _ if game.hasAi || nvui                                                            => false
+                  case ALWAYS                                                                             => true
+                  case CORRESPONDENCE_UNLIMITED if game.isCorrespondence                                  => true
+                  case CORRESPONDENCE_ONLY if game.hasCorrespondenceClock                                 => true
+                  case CLASSIC_CORRESPONDENCE_UNLIMITED if game.isClassicalSpeed || game.isCorrespondence => true
+                  case _                                                                                  => false
                 }
               })
           )

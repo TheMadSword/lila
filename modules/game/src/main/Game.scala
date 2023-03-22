@@ -101,7 +101,6 @@ case class Game(
   def isMandatory          = isTournament || isSimul || isSwiss
   def nonMandatory         = !isMandatory
   def canTakebackOrAddTime = !isMandatory
-  def isClassical          = perfType contains Classical
 
   def hasChat = !isTournament && !isSimul && nonAi
 
@@ -471,6 +470,7 @@ case class Game(
     playableCorrespondenceClock ?? { _ outoftime turnColor }
 
   def isCorrespondence = speed == Speed.Correspondence
+  def isClassicalSpeed = speed == Speed.Classical
 
   def isSwitchable = nonAi && (isCorrespondence || isSimul)
 
