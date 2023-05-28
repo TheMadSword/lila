@@ -117,12 +117,14 @@ final class JsonView(
                 import Pref.SubmitMove.*
                 pp("submitMove w/ pref.submitMove" + );
                 pref.submitMove match {
-                  case _ if game.hasAi || nvui                                                            => false
-                  case ALWAYS                                                                             => true
-                  case CORRESPONDENCE_UNLIMITED if game.isCorrespondence                                  => true
-                  case CORRESPONDENCE_ONLY if game.hasCorrespondenceClock                                 => true
-                  case CLASSIC_CORRESPONDENCE_UNLIMITED if game.isSpeed(Speed.Classical) || game.isCorrespondence => true
-                  case _                                                                                  => false
+                  case _ if game.hasAi || nvui                                                              => false
+                  case ALWAYS                                                                               => true
+                  case n if ((n & UNLIMITED) != 0) && game.isCorrespondence && !game.hasCorrespondenceClock => true
+                  case n if ((n & CORRESPONDENCE) != 0) && game.hasCorrespondenceClock                      => true
+                  case n if ((n & CLASSICAL) != 0) && game.isSpeed(Speed.Classical)                         => true
+                  case n if ((n & RAPID) != 0) && game.isSpeed(Speed.Rapid)                                 => true
+                  case n if ((n & BLITZ) != 0) && game.isSpeed(Speed.Blitz)                                 => true
+                  case _                                                                                    => false
                   //TODO: bitwise --> e.g. case n if n % 10 == 1 => n + "st"
                 }
               })

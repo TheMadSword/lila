@@ -196,7 +196,7 @@ object Pref:
       PREMOVE -> "When premoving"
     )
 
-  object SubmitMove:
+  /*object SubmitMove:
     val NEVER                             = 0
     val CORRESPONDENCE_ONLY               = 4
     val CORRESPONDENCE_UNLIMITED          = 1
@@ -208,6 +208,25 @@ object Pref:
       CORRESPONDENCE_ONLY               -> "Correspondence games only",
       CORRESPONDENCE_UNLIMITED          -> "Correspondence and unlimited",
       CLASSIC_CORRESPONDENCE_UNLIMITED  -> "Classic, correspondence, and unlimited",
+      ALWAYS                            -> "Always"
+    )*/
+
+  object SubmitMove:
+    val ALWAYS                            = -1
+    val NEVER                             = 0
+    val UNLIMITED                         = 1
+    val CORRESPONDENCE                    = 2
+    val CLASSICAL                         = 4
+    val RAPID                             = 8
+    val BLITZ                             = 16
+
+    val choices = Seq(
+      NEVER                             -> "Never",
+      UNLIMITED                         -> "Unlimited",
+      CORRESPONDENCE                    -> "Correspondence",
+      CLASSICAL                         -> "Classical",
+      RAPID                             -> "Rapid",
+      BLITZ                             -> "Blitz",
       ALWAYS                            -> "Always"
     )
 
@@ -447,7 +466,7 @@ object Pref:
     challenge = Challenge.REGISTERED,
     message = Message.ALWAYS,
     studyInvite = StudyInvite.ALWAYS,
-    submitMove = SubmitMove.CORRESPONDENCE_ONLY,
+    submitMove = SubmitMove.CORRESPONDENCE,
     confirmResign = ConfirmResign.YES,
     insightShare = InsightShare.FRIENDS,
     keyboardMove = KeyboardMove.NO,

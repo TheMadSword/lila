@@ -53,10 +53,10 @@ final class Pref(env: Env) extends LilaController(env):
           _ =>
             forms.pref
               .bindFromRequest(lila.pref.FormCompatLayer(ctx.pref, ctx.body))
-              .fold(
+              .pp.fold(
                 err => BadRequest(err.toString).toFuccess,
                 onSuccess
-              ),
+              ).pp,
           onSuccess
         )
     }
