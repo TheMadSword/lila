@@ -13,6 +13,7 @@ import lila.game.{ Game, Player as GamePlayer, Pov }
 import lila.pref.Pref
 import lila.user.{ User, UserRepo }
 import lila.socket.SocketVersion.given
+import chess.Speed
 
 final class JsonView(
     userRepo: UserRepo,
@@ -114,13 +115,15 @@ final class JsonView(
               .add("showCaptured" -> pref.captured)
               .add("submitMove" -> {
                 import Pref.SubmitMove.*
+                pp("submitMove w/ pref.submitMove" + );
                 pref.submitMove match {
                   case _ if game.hasAi || nvui                                                            => false
                   case ALWAYS                                                                             => true
                   case CORRESPONDENCE_UNLIMITED if game.isCorrespondence                                  => true
                   case CORRESPONDENCE_ONLY if game.hasCorrespondenceClock                                 => true
-                  case CLASSIC_CORRESPONDENCE_UNLIMITED if game.isClassicalSpeed || game.isCorrespondence => true
+                  case CLASSIC_CORRESPONDENCE_UNLIMITED if game.isSpeed(Speed.Classical) || game.isCorrespondence => true
                   case _                                                                                  => false
+                  //TODO: bitwise --> e.g. case n if n % 10 == 1 => n + "st"
                 }
               })
           )

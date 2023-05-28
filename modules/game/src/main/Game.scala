@@ -471,6 +471,7 @@ case class Game(
 
   def isCorrespondence = speed == Speed.Correspondence
   def isClassicalSpeed = speed == Speed.Classical
+  def isSpeed(s: Speed) = speed == s;
 
   def isSwitchable = nonAi && (isCorrespondence || isSimul)
 

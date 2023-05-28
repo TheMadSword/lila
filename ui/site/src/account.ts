@@ -9,6 +9,7 @@ lichess.load.then(() => {
   ];
 
   $('.security table form').on('submit', function (this: HTMLFormElement) {
+    console.log("COINCOIN");
     xhr.text(this.action, { method: 'post', body: new URLSearchParams(new FormData(this) as any) });
     $(this).parent().parent().remove();
     return false;
@@ -19,6 +20,26 @@ lichess.load.then(() => {
       $form = $(form),
       showSaved = () => $form.find('.saved').removeClass('none');
     $form.find('input').on('change', function (this: HTMLInputElement) {
+      console.log("this.name =  " + this.name + " val = " + this.value);
+      console.log("chkbox = " + (this.type === 'checkbox'));
+      if (this.type === 'checkbox') {
+        const valueHidden = $(`input[type="hidden"][name="${this.name}"]`);
+        const bitInputs = $(`input[type="checkbox"][name="${this.name}"]`);
+        let sum = 0;
+        for (let i = 0; i < bitInputs.length; ++i) {
+          if (bitInputs !== undefined && bitInputs[i] !== undefined) {
+            console.log("bit " + (<HTMLInputElement>bitInputs[i])?.value + " is " + (<HTMLInputElement>bitInputs[i])?.checked);
+            if ((<HTMLInputElement>bitInputs[i])?.checked) {
+              sum |= parseInt((<HTMLInputElement>bitInputs[i])?.value);
+            }
+          }
+        }
+        valueHidden.val(sum.toString());
+        console.log("bitSum should be " + sum);
+        console.log("valueHidden " + (<HTMLInputElement>valueHidden[0])?.value);
+        //if this.checked ==> nop always
+        // disabled all values BUT hidden that is set, then setTimeout & reenable/refresh
+      }
       localPrefs.forEach(([categ, name, storeKey]) => {
         if (this.name == `${categ}.${name}`) {
           lichess.storage.boolean(storeKey).set(this.value == '1');
