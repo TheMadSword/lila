@@ -24,6 +24,11 @@
     border-width: 0 1px;
   }
 
+  .negotiation.move-confirm,
+  .negotiation.move-confirm-buttons {
+    border-width: 0 0px;
+  }
+
   .suggestion {
     @extend %flex-center;
 
@@ -90,8 +95,16 @@
       margin-#{$end-direction}: 1px;
     }
 
+    .move-confirm-buttons .accept {
+      margin-#{$start-direction}: 1px;
+    }
+
     .decline {
       color: $c-bad;
+    }
+
+    .move-confirm-buttons .decline {
+      margin-#{$end-direction}: 0px;
     }
 
     a:hover {

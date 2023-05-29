@@ -282,9 +282,12 @@ export function submitMove(ctrl: RoundController): VNode | undefined {
           ctrl.trans,
           ctrl.redraw
         ),
-        declineButton(ctrl, () => ctrl.submitMove(false), 'cancel'),
-        h('p', ctrl.noarg('confirmMove')),
-        acceptButton(ctrl, 'confirm-yes', () => ctrl.submitMove(true)),
+        h('div.negotiation.rcontrols.move-confirm-buttons', [
+          declineButton(ctrl, () => ctrl.submitMove(false), 'cancel'),
+          h('p', ctrl.noarg('confirmMove')),
+          acceptButton(ctrl, 'confirm-yes', () => ctrl.submitMove(true)
+          )],
+        ),
       ])
     : undefined;
 }
