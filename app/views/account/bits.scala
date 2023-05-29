@@ -80,7 +80,8 @@ object bits:
         pp("key.toSring.toInt = " + key.toString.toInt)
         val intVal = unwrapOption(field.value)
         val keyVal = key.toString.toInt
-        val checked = keyVal == 0 && intVal == 0 || 
+        val checked = keyVal == 0 && intVal == 0 || //NEVER
+          keyVal == -1 && intVal == -1 || //ALWAYS
           keyVal > 0 && (intVal & key.toString.toInt) == key.toString.toInt //TODO change @ bits; + never
         pp("bit = " + (unwrapOption(field.value) & key.toString.toInt))
         pp("checked = " + checked)

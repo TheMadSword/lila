@@ -20,11 +20,36 @@ lichess.load.then(() => {
       $form = $(form),
       showSaved = () => $form.find('.saved').removeClass('none');
     $form.find('input').on('change', function (this: HTMLInputElement) {
-      console.log("this.name =  " + this.name + " val = " + this.value);
+      console.log("this.name =  " + this.name + " val = " + this.value/*checked is up to date*/ + " n " + typeof(this.value));
       console.log("chkbox = " + (this.type === 'checkbox'));
       if (this.type === 'checkbox') {
-        const valueHidden = $(`input[type="hidden"][name="${this.name}"]`);
         const bitInputs = $(`input[type="checkbox"][name="${this.name}"]`);
+
+        if (this.value === '-1') {
+          if (this.checked) {
+            for (let i = 0; i < bitInputs.length; ++i) {
+              if (bitInputs !== undefined && bitInputs[i] !== undefined) {
+                (<HTMLInputElement>bitInputs[i]).checked = parseInt((<HTMLInputElement>bitInputs[i]).value) !== 0;
+              }
+            }
+          } //else do nothing
+        } else if (this.value === '0') {
+          if (this.checked) {
+            //Deselect all non-Never
+            for (let i = 0; i < bitInputs.length; ++i) {
+              if (bitInputs !== undefined && bitInputs[i] !== undefined) {
+                if (parseInt((<HTMLInputElement>bitInputs[i]).value) !== 0) {
+                  (<HTMLInputElement>bitInputs[i]).checked = false;
+                }
+              }
+            }
+          } else {
+            //self-reselect;  Never is never
+            this.checked = !this.checked
+            return;
+          }
+        }
+
         let sum = 0;
         for (let i = 0; i < bitInputs.length; ++i) {
           if (bitInputs !== undefined && bitInputs[i] !== undefined) {
@@ -34,6 +59,9 @@ lichess.load.then(() => {
             }
           }
         }
+        (<HTMLInputElement>$(`input[type="checkbox"][name="${this.name}"][value="0"]`)[0]).checked = sum === 0;
+
+        const valueHidden = $(`input[type="hidden"][name="${this.name}"]`);
         valueHidden.val(sum.toString());
         console.log("bitSum should be " + sum);
         console.log("valueHidden " + (<HTMLInputElement>valueHidden[0])?.value);
