@@ -46,6 +46,9 @@ export const renderTablePlay = (ctrl: RoundController) => {
       loading || submit
         ? []
         : [
+            !ctrl.moveToSubmit && !ctrl.dropToSubmit
+              ? button.toggleMoveConfirmationBtn(ctrl)
+              : undefined,
             game.abortable(d)
               ? button.standard(ctrl, undefined, '', 'abortGame', 'abort')
               : button.standard(ctrl, game.takebackable, '', 'proposeATakeback', 'takeback-yes', ctrl.takebackYes),

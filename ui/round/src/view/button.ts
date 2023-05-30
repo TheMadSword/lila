@@ -268,20 +268,30 @@ export function answerOpponentTakebackProposition(ctrl: RoundController) {
     : null;
 }
 
+export function toggleMoveConfirmationBtn(ctrl: RoundController): VNode | undefined {
+  return ctrl.data.pref.submitMove && !ctrl.moveToSubmit && !ctrl.dropToSubmit
+    ? h('div.negotiation.fbt.move-confirm-buttons', [toggleMoveConfirmation(ctrl)])
+  : undefined;
+}
+
+function toggleMoveConfirmation(ctrl: RoundController): VNode {
+  return toggle(
+      {
+        name: '',
+        title: 'enableConfirmationForThisGame',
+        id: 'enable-move-confirmation',
+        checked: ctrl.allowMoveConfirmation,
+        change: ctrl.toggleMoveConfirmation,
+      },
+      ctrl.trans,
+      ctrl.redraw
+    );
+}
+
 export function submitMove(ctrl: RoundController): VNode | undefined {
   return ctrl.moveToSubmit || ctrl.dropToSubmit
     ? h('div.negotiation.move-confirm', [
-        toggle(
-          {
-            name: '',
-            title: 'enableConfirmationForThisGame',
-            id: 'enable-move-confirmation',
-            checked: ctrl.newAllowMoveConfirmation,
-            change: ctrl.toggleMoveConfirmation,
-          },
-          ctrl.trans,
-          ctrl.redraw
-        ),
+        toggleMoveConfirmation(ctrl),
         h('div.negotiation.rcontrols.move-confirm-buttons', [
           declineButton(ctrl, () => ctrl.submitMove(false), 'cancel'),
           h('p', ctrl.noarg('confirmMove')),

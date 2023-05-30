@@ -82,7 +82,6 @@ export default class RoundController {
   justCaptured?: cg.Piece;
   shouldSendMoveTime = false;
   allowMoveConfirmation = true;
-  newAllowMoveConfirmation = true;
   preDrop?: cg.Role;
   lastDrawOfferAtPly?: Ply;
   nvui?: NvuiPlugin;
@@ -97,7 +96,6 @@ export default class RoundController {
     const d = (this.data = opts.data);
 
     this.allowMoveConfirmation = true;
-    this.newAllowMoveConfirmation = true;
     this.ply = round.lastPly(d);
     this.goneBerserk[d.player.color] = d.player.berserk;
     this.goneBerserk[d.opponent.color] = d.opponent.berserk;
@@ -339,7 +337,6 @@ export default class RoundController {
     }
     this.socket.send(tpe, data, socketOpts);
 
-    this.allowMoveConfirmation = this.newAllowMoveConfirmation;
     this.justDropped = meta.justDropped;
     this.justCaptured = meta.justCaptured;
     this.preDrop = undefined;
@@ -700,12 +697,11 @@ export default class RoundController {
       lichess.sound.play('confirmation');
     } else this.jump(this.ply);
     this.cancelMove();
-    this.newAllowMoveConfirmation = this.allowMoveConfirmation;
     if (toSubmit) this.setLoading(true, 300);
   };
 
   toggleMoveConfirmation = (): void => {
-    this.newAllowMoveConfirmation = !this.newAllowMoveConfirmation;
+    this.allowMoveConfirmation = !this.allowMoveConfirmation;
   };
 
   cancelMove = (): void => {

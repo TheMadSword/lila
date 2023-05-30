@@ -9,7 +9,6 @@ lichess.load.then(() => {
   ];
 
   $('.security table form').on('submit', function (this: HTMLFormElement) {
-    console.log("COINCOIN");
     xhr.text(this.action, { method: 'post', body: new URLSearchParams(new FormData(this) as any) });
     $(this).parent().parent().remove();
     return false;

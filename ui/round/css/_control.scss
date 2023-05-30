@@ -19,9 +19,14 @@
   .pending,
   .negotiation {
     padding: 0.5em 3%;
+    border-width: 0 1px;
+  }
+
+  .suggestion,
+  .pending,
+  .negotiation:not(.move-confirm-buttons) {
     background: $c-bg-zebra;
     border: $border;
-    border-width: 0 1px;
   }
 
   .negotiation.move-confirm,
@@ -73,9 +78,12 @@
     }
   }
 
+  .negotiation:not(.move-confirm-buttons) {
+    animation: flash-once 1s ease-in;
+  }
+
   .negotiation {
     @extend %flex-center-nowrap;
-    animation: flash-once 1s ease-in;
 
     padding: 1px;
 
