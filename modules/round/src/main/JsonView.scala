@@ -115,7 +115,6 @@ final class JsonView(
               .add("showCaptured" -> pref.captured)
               .add("submitMove" -> {
                 import Pref.SubmitMove.*
-                pp("submitMove w/ pref.submitMove" + );
                 pref.submitMove match {
                   case _ if game.hasAi || nvui                                                              => false
                   case ALWAYS                                                                               => true
@@ -125,7 +124,6 @@ final class JsonView(
                   case n if ((n & RAPID) != 0) && game.isSpeed(Speed.Rapid)                                 => true
                   case n if ((n & BLITZ) != 0) && game.isSpeed(Speed.Blitz)                                 => true
                   case _                                                                                    => false
-                  //TODO: bitwise --> e.g. case n if n % 10 == 1 => n + "st"
                 }
               })
           )

@@ -57,10 +57,9 @@ object bits:
     }
   }
 
-  //TODO : Change name to say that we have a "empty choice"
   def checkboxes[A](field: play.api.data.Field, options: Iterable[(A, String)], prefix: String = "ir") =
     st.group(cls := "radio")(
-      ///
+      /// Will hold the value being calculated with the various checkboxes when sending
       List(div(
         input(
             st.id := s"$prefix${field.id}_hidden",
@@ -72,19 +71,14 @@ object bits:
         st.style := "display: none;"
       ))
       :::
-      ///
+      /// Values, with Never/Always for convenience
       options.map { (key, value) =>
         val id      = s"$prefix${field.id}_$key"
-        pp("REDREDREDYOLOYOLOYOLO for value " + value)
-        pp("unwrapOption(field.value)" + unwrapOption(field.value))
-        pp("key.toSring.toInt = " + key.toString.toInt)
         val intVal = unwrapOption(field.value)
         val keyVal = key.toString.toInt
         val checked = keyVal == 0 && intVal == 0 || //NEVER
           keyVal == -1 && intVal == -1 || //ALWAYS
-          keyVal > 0 && (intVal & key.toString.toInt) == key.toString.toInt //TODO change @ bits; + never
-        pp("bit = " + (unwrapOption(field.value) & key.toString.toInt))
-        pp("checked = " + checked)
+          keyVal > 0 && (intVal & key.toString.toInt) == key.toString.toInt
         div(
           input(
             st.id := id,
@@ -95,5 +89,5 @@ object bits:
           ),
           label(`for` := id)(value)
         )
-      }.toList //prepend/append to map for never/always ?
+      }.toList
     )

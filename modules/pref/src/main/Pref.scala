@@ -196,21 +196,6 @@ object Pref:
       PREMOVE -> "When premoving"
     )
 
-  /*object SubmitMove:
-    val NEVER                             = 0
-    val CORRESPONDENCE_ONLY               = 4
-    val CORRESPONDENCE_UNLIMITED          = 1
-    val ALWAYS                            = 2
-    val CLASSIC_CORRESPONDENCE_UNLIMITED  = 8
-
-    val choices = Seq(
-      NEVER                             -> "Never",
-      CORRESPONDENCE_ONLY               -> "Correspondence games only",
-      CORRESPONDENCE_UNLIMITED          -> "Correspondence and unlimited",
-      CLASSIC_CORRESPONDENCE_UNLIMITED  -> "Classic, correspondence, and unlimited",
-      ALWAYS                            -> "Always"
-    )*/
-
   object SubmitMove:
     val ALWAYS                            = -1
     val NEVER                             = 0
