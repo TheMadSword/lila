@@ -24,6 +24,7 @@ final class Round(
     with TheftPrevention:
 
   private def renderPlayer(pov: Pov)(using ctx: WebContext): Fu[Result] =
+    pp("renderPlayer")
     negotiate(
       html =
         if (!pov.game.started) notFound

@@ -67,6 +67,7 @@ final class Pref(env: Env) extends LilaController(env):
   }
 
   def set(name: String) = OpenBody:
+    pp("coincoinc w/ " + name)
     if name == "zoom"
     then Ok.withCookies(env.lilaCookie.cookie("zoom", (getInt("v") | 85).toString))
     else if name == "agreement" then
@@ -95,10 +96,25 @@ final class Pref(env: Env) extends LilaController(env):
     "bg"           -> (forms.bg           -> save("bg")),
     "bgImg"        -> (forms.bgImg        -> save("bgImg")),
     "is3d"         -> (forms.is3d         -> save("is3d")),
-    "zen"          -> (forms.zen          -> save("zen")),
+    "zen"          -> (forms.zen          -> saveZen()),
     "voice"        -> (forms.voice        -> save("voice")),
     "keyboardMove" -> (forms.keyboardMove -> save("keyboardMove"))
   )
+
+  private def saveZen()(value: String, ctx: WebContext): Fu[Cookie] =
+    //We just want to change the 0-1 bit, so discard 0-1 bit
+    var newVal = ctx.pref.zenInt & ~1
+
+    //Add 0-1 bit
+    newVal |= value.toInt
+
+    pp("zenInt (old) = " + ctx.pref.zenInt + "isZen (old)" + ctx.pref.isZen)
+    pp("coincoinsaveZen w/ val = " + value + " or toInt = " + value.toInt)
+    pp("coincoinsaveZen w/ newVal = " + newVal)
+    save("zen")(newVal.toString, ctx)
+    //ctx.pref.isZen = old value (true/false) @ Boolean (before modif)
+    //value = new value (string)
+    //Doesn't occur when changing value normally via pref menu
 
   private def save(name: String)(value: String, ctx: WebContext): Fu[Cookie] =
     ctx.me so {

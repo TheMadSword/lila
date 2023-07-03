@@ -43,9 +43,11 @@ object player:
         )
     }
 
+
+    pp("apply-game-b4layout_player.scala")
     bits.layout(
       variant = pov.game.variant,
-      title = s"${trans.play.txt()} ${if (ctx.pref.isZen) "ZEN" else playerText(pov.opponent)}",
+      title = s"${trans.play.txt()} ${if (ctx.pref.isZen || ctx.pref.isZenAutomatic) "ZEN" else playerText(pov.opponent)}",
       moreJs = frag(
         roundNvuiTag,
         roundTag,

@@ -28,6 +28,7 @@ object games:
   )(using
       ctx: WebContext
   ) =
+    pp("apply-game")
     views.html.base.layout(
       title = s"${user.username} games",
       moreCss = cssTag("mod.games"),

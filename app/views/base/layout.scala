@@ -281,13 +281,14 @@ object layout:
               baseClass              -> true,
               "dark-board"           -> (ctx.pref.bg == lila.pref.Pref.Bg.DARKBOARD),
               "piece-letter"         -> ctx.pref.pieceNotationIsLetter,
-              "zen"                  -> ctx.pref.isZen,
+              "zen"                  -> ((ctx.pref.isZen.pp("isZen")) || (playing && ctx.pref.isZenAutomatic)), //beginning of a game
               "blind-mode"           -> ctx.blind,
               "kid"                  -> ctx.kid,
               "mobile"               -> ctx.isMobileBrowser,
-              "playing fixed-scroll" -> playing,
-              "zenable"              -> zenable,
-              "no-rating"            -> !ctx.pref.showRatings
+              "playing fixed-scroll" -> playing.pp("playing"),
+              "zenable"              -> zenable.pp("zenable"), //beginning of a game
+              "no-rating"            -> !ctx.pref.showRatings,
+              "zenAutomatic"         -> (playing && ctx.pref.isZenAutomatic)
             )
           },
           dataDev,
