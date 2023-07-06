@@ -38,15 +38,8 @@ final class JsonView(
       user: Option[Either[LightUser.Ghost, User.WithPerf]],
       withFlags: WithFlags,
       showCountryFlags: Boolean
-  ): JsObject =
-    var countryCode: Option[String] = Some("");
-    if (showCountryFlags) {
-      (user.map {_.toOption.fold(userJsonView.ghost) { u => 
-            countryCode = u.user.profileOrDefault.country
-      } })
-    }
-
-    var json: JsObject = Json
+  ): JsObject = 
+    Json
       .obj("color" -> p.color.name)
       .add("user" -> user.map:
         _.toOption.fold(userJsonView.ghost): u =>
@@ -62,12 +55,7 @@ final class JsonView(
       .add("checks" -> checkCount(g, p.color))
       .add("berserk" -> p.berserk)
       .add("blurs" -> (withFlags.blurs so blurs(g, p)))
-      
-    if (showCountryFlags) {
-      json = json.add("countryCode" -> countryCode);
-    }
-
-    return json;
+      .add("countryCode" -> user.ifTrue(showCountryFlags).flatMap(_.toOption).map(_.user.profileOrDefault.country))
 
 
   def playerJson(
