@@ -92,7 +92,11 @@ object OpeningPage:
                 result,
                 (result.sum * 100d / exp.movesSum),
                 opening,
-                shortName = NameSection.variationName(query.exactOpening, opening)
+                shortName = opening.flatMap(op => NameSection.sectionsOf(op.name) match {
+                      case NonEmptyList(family, variations) =>
+                        variations.nonEmpty option variations.last
+                  }
+                )
               )
             }
             .sortBy(-_.result.sum),
