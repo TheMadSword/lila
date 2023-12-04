@@ -71,12 +71,20 @@ export default class EditorCtrl {
   }
 
   onChange(): void {
-    const fen = this.getFen();
+    const fen = this.getLegalFen() || this.getFen();
+    this.revalidateEpSquare(fen);
     if (!this.cfg.embed) {
       window.history.replaceState(null, '', this.makeEditorUrl(fen, this.bottomColor()));
     }
     this.options.onChange?.(fen);
     this.redraw();
+  }
+
+  // Ideally to be replaced when something like parseCastlingFen exist in chessops but for epSquare
+  private revalidateEpSquare(fen: string) {
+    if (fen.split(' ')[3] === '-' && this.epSquare) {
+      this.epSquare = undefined;
+    }
   }
 
   private castlingToggleFen(): string {
@@ -123,11 +131,44 @@ export default class EditorCtrl {
     );
   }
 
+  private getEnPassantOptions(fen: string): string[] {
+    const strUnpack = ((str: string) => 
+      [...str].reduce((accumulator, current) => {
+        let parsedInt = parseInt(current);
+        return accumulator + (parsedInt >= 1 ? 'x'.repeat(parsedInt) : current);
+      }, ""));
+    const checkRow = (row: string, regex: RegExp, offset: number, filesEnPassant: Set<number>) => {
+      let match: RegExpExecArray | null;
+      while ((match = regex.exec(row)) != null) {
+        filesEnPassant.add(match.index + offset);
+      }
+    }
+    let filesEnPassant:Set<any> = new Set();
+    const [positions, turn] = fen.split(' ');
+    const rows = positions.split('/');
+    let unpackedStr = strUnpack(rows[turn === 'w' ? 3 : 4]);
+    checkRow(unpackedStr, /pP/g, turn === 'w' ? 0 : 1, filesEnPassant);
+    checkRow(unpackedStr, /Pp/g, turn === 'w' ? 1 : 0, filesEnPassant);
+    if (filesEnPassant.size >= 1) {
+      let [row1, row2] = 
+        [strUnpack(rows[turn === 'w' ? 1 : 6]), 
+        strUnpack(rows[turn === 'w' ? 2 : 5])];
+      filesEnPassant = new Set(Array.from(filesEnPassant)
+        .filter((e) => row1[e] === 'x' && row2[e] === 'x')
+        .map((e) => String.fromCharCode('a'.charCodeAt(0) + e) + (turn === 'w' ? '6' : '3'))
+        );
+    }
+
+    return Array.from(filesEnPassant).sort();
+  };
+
   getState(): EditorState {
+    const legalFen = this.getLegalFen();
     return {
       fen: this.getFen(),
-      legalFen: this.getLegalFen(),
+      legalFen: legalFen,
       playable: this.rules == 'chess' && this.isPlayable(),
+      enPassantOptions: legalFen ? this.getEnPassantOptions(legalFen) : [],
     };
   }
 
@@ -155,6 +196,12 @@ export default class EditorCtrl {
 
   setTurn(turn: Color): void {
     this.turn = turn;
+    this.epSquare = undefined;
+    this.onChange();
+  }
+
+  setEnPassant(epSquare: Square | undefined): void {
+    this.epSquare = epSquare;
     this.onChange();
   }
 
