@@ -153,20 +153,29 @@ export default class EditorCtrl {
         filesEnPassant.add(match.index + offset);
       }
     };
-    const filesEnPassant: Set<number> = new Set();
+    const getEnPassantOnRank = (ranks: string[], victimRank: number, turn: string): string[] => {
+      const filesEnPassant: Set<number> = new Set();
+      const unpackedRank = unpackRank(ranks[victimRank]);
+      checkRank(unpackedRank, /pP/g, turn === 'w' ? 0 : 1, filesEnPassant);
+      checkRank(unpackedRank, /Pp/g, turn === 'w' ? 1 : 0, filesEnPassant);
+      const [rank1, rank2] =
+        filesEnPassant.size >= 1
+          ? [
+              unpackRank(ranks[victimRank + (turn === 'w' ? -2 : 2)]),
+              unpackRank(ranks[victimRank + (turn === 'w' ? -1 : 1)]),
+            ]
+          : [null, null];
+      return Array.from(filesEnPassant)
+        .filter(e => rank1![e] === 'x' && rank2![e] === 'x')
+        .map(e => String.fromCharCode('a'.charCodeAt(0) + e) + (8 - victimRank + (turn === 'w' ? 1 : -1)));
+    };
     const [positions, turn] = fen.split(' ');
     const ranks = positions.split('/');
-    const unpackedRank = unpackRank(ranks[turn === 'w' ? 3 : 4]);
-    checkRank(unpackedRank, /pP/g, turn === 'w' ? 0 : 1, filesEnPassant);
-    checkRank(unpackedRank, /Pp/g, turn === 'w' ? 1 : 0, filesEnPassant);
-    const [rank1, rank2] =
-      filesEnPassant.size >= 1
-        ? [unpackRank(ranks[turn === 'w' ? 1 : 6]), unpackRank(ranks[turn === 'w' ? 2 : 5])]
-        : [null, null];
-    return Array.from(filesEnPassant)
-      .filter(e => rank1![e] === 'x' && rank2![e] === 'x')
-      .map(e => String.fromCharCode('a'.charCodeAt(0) + e) + (turn === 'w' ? '6' : '3'))
-      .sort();
+    let filesEnPassantAll: string[] =
+      this.rules === 'horde' && turn === 'b' ? [...getEnPassantOnRank(ranks, 5, 'b')] : [];
+    filesEnPassantAll = [...filesEnPassantAll, ...getEnPassantOnRank(ranks, turn === 'w' ? 3 : 4, turn)];
+
+    return filesEnPassantAll;
   }
 
   getState(): EditorState {
